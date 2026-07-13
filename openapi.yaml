@@ -4,13 +4,13 @@ info:
   version: 1.0.0
 
 servers:
-  - url: http://localhost:3000
+  - url: https://fort-zoho.onrender.com
 
 paths:
   /leads:
     get:
       operationId: getLeads
-      summary: Get leads
+      summary: Get Zoho CRM leads
       responses:
         "200":
           description: OK
@@ -18,7 +18,7 @@ paths:
   /search:
     get:
       operationId: searchLeads
-      summary: Search leads
+      summary: Search Zoho CRM leads
       parameters:
         - name: q
           in: query
@@ -32,7 +32,7 @@ paths:
   /contacts:
     get:
       operationId: searchContacts
-      summary: Search contacts
+      summary: Search Zoho CRM contacts
       parameters:
         - name: q
           in: query
