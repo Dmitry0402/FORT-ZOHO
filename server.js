@@ -3,15 +3,27 @@ console.log("FORT Zoho Connector");
 require("dotenv").config();
 
 const express = require("express");
+const path = require("path");
+
 const { getAccessToken } = require("./services/zoho");
 const { getLeads, searchLeads } = require("./services/crm");
 const { searchContacts } = require("./services/contacts");
+
 const app = express();
 
+app.use(express.json());
+
+// Home
 app.get("/", (req, res) => {
     res.send("FORT Zoho Connector is running!");
 });
 
+// Serve OpenAPI schema for GPT Actions
+app.get("/openapi.yaml", (req, res) => {
+    res.sendFile(path.join(__dirname, "openapi.yaml"));
+});
+
+// Get Zoho access token
 app.get("/token", async (req, res) => {
     try {
         const accessToken = await getAccessToken();
@@ -21,6 +33,7 @@ app.get("/token", async (req, res) => {
     }
 });
 
+// Get all leads
 app.get("/leads", async (req, res) => {
     try {
         const leads = await getLeads();
@@ -30,6 +43,7 @@ app.get("/leads", async (req, res) => {
     }
 });
 
+// Search leads
 app.get("/search", async (req, res) => {
     try {
         const q = req.query.q;
@@ -48,15 +62,27 @@ app.get("/search", async (req, res) => {
     }
 });
 
-const PORT = process.env.PORT || 3000;
+// Search contacts
 app.get("/contacts", async (req, res) => {
     try {
-        const result = await searchContacts(req.query.q);
+        const q = req.query.q;
+
+        if (!q) {
+            return res.status(400).json({
+                error: "Missing query parameter q"
+            });
+        }
+
+        const result = await searchContacts(q);
         res.json(result);
+
     } catch (error) {
         res.status(500).json(error.response?.data || { error: error.message });
     }
 });
+
+const PORT = process.env.PORT || 3000;
+
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
