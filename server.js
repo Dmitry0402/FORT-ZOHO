@@ -13,14 +13,13 @@ const app = express();
 
 app.use(express.json());
 
+// This serves all static files in the project folder,
+// including openapi.yaml
+app.use(express.static(__dirname));
+
 // Home
 app.get("/", (req, res) => {
     res.send("FORT Zoho Connector is running!");
-});
-
-// Serve OpenAPI schema for GPT Actions
-app.get("/openapi.yaml", (req, res) => {
-    res.sendFile(path.join(__dirname, "openapi.yaml"));
 });
 
 // Get Zoho access token
