@@ -64,8 +64,12 @@ paths:
                   type: string
                 First_Name:
                   type: string
+                Designation:
+                  type: string
+                  description: Job title of the lead
                 Email:
                   type: string
+                  format: email
                 Phone:
                   type: string
       responses:
