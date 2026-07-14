@@ -3,18 +3,19 @@ console.log("FORT Zoho Connector");
 require("dotenv").config();
 
 const express = require("express");
-const path = require("path");
 
 const { getAccessToken } = require("./services/zoho");
-const { getLeads, searchLeads } = require("./services/crm");
+const {
+    getLeads,
+    searchLeads,
+    createLead
+} = require("./services/crm");
+
 const { searchContacts } = require("./services/contacts");
 
 const app = express();
 
 app.use(express.json());
-
-// This serves all static files in the project folder,
-// including openapi.yaml
 app.use(express.static(__dirname));
 
 // Home
@@ -75,6 +76,16 @@ app.get("/contacts", async (req, res) => {
         const result = await searchContacts(q);
         res.json(result);
 
+    } catch (error) {
+        res.status(500).json(error.response?.data || { error: error.message });
+    }
+});
+
+// Create Lead
+app.post("/createLead", async (req, res) => {
+    try {
+        const result = await createLead(req.body);
+        res.json(result);
     } catch (error) {
         res.status(500).json(error.response?.data || { error: error.message });
     }
