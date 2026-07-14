@@ -31,7 +31,26 @@ async function searchLeads(searchText) {
     return response.data;
 }
 
+async function createLead(leadData) {
+    const accessToken = await getAccessToken();
+
+    const response = await axios.post(
+        "https://www.zohoapis.com/crm/v8/Leads",
+        {
+            data: [leadData]
+        },
+        {
+            headers: {
+                Authorization: `Zoho-oauthtoken ${accessToken}`
+            }
+        }
+    );
+
+    return response.data;
+}
+
 module.exports = {
     getLeads,
-    searchLeads
+    searchLeads,
+    createLead
 };
