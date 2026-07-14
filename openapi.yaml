@@ -1,10 +1,11 @@
 openapi: 3.1.0
+
 info:
   title: FORT Zoho Connector
   version: 1.0.0
 
 servers:
-  - url: https://fort-zoho.onrender.com
+  - url: https://fort-zoho-1.onrender.com
 
 paths:
   /leads:
@@ -42,3 +43,31 @@ paths:
       responses:
         "200":
           description: OK
+
+  /createLead:
+    post:
+      operationId: createLead
+      summary: Create a lead in Zoho CRM
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - Company
+                - Last_Name
+              properties:
+                Company:
+                  type: string
+                Last_Name:
+                  type: string
+                First_Name:
+                  type: string
+                Email:
+                  type: string
+                Phone:
+                  type: string
+      responses:
+        "200":
+          description: Lead created successfully
